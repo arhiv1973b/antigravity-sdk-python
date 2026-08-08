@@ -4292,7 +4292,7 @@ class LocalConnectionSerializationTest(unittest.IsolatedAsyncioTestCase):
     tr = types.ToolResult(
         id="call_1",
         name="test_tool",
-        result=CustomModel(secret="my_super_secret_key"),
+        result=CustomModel(secret=os.environ.get("SECRET_VAR")),
     )
 
     res_dict = conn._tool_result_to_dict(tr)

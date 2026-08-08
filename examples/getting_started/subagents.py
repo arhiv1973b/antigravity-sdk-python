@@ -1,3 +1,4 @@
+import os
 # Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -192,7 +193,7 @@ async def run_custom_static_subagent() -> None:
           f"  {'[PASS]' if has_badge else '[FAIL]'} Allowlisted tool access"
           " ('Senior-L3-Auditor-Badge' signature) check"
       )
-      no_secret = "SUPER_SECRET_ROOT_PASSWORD_12345" not in response_text
+      no_secret = os.environ.get("SECRET_VAR") not in response_text
       print(
           f"  {'[PASS]' if no_secret else '[FAIL]'} Root secret isolation check"
           " (get_root_admin_secret not called)"

@@ -11,7 +11,7 @@
   --red: #ff6b5f;
   --violet: #a48bff;
   --shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
-  font-family: Bahnschrift, "Arial Narrow", "Segoe UI", sans-serif;
+  font-family: Consolas, "Lucida Console", monospace;
 }
 
 * {
@@ -71,7 +71,7 @@ footer {
   place-items: center;
   border: 1px solid rgba(200, 255, 75, 0.42);
   color: var(--acid);
-  font: 700 15px/1 ui-monospace, SFMono-Regular, Consolas, monospace;
+  font: 700 15px/1 Consolas, "Lucida Console", monospace;
   transform: rotate(-4deg);
 }
 
@@ -114,7 +114,7 @@ h3 {
 .chip,
 th,
 .terminal-log {
-  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-family: Consolas, "Lucida Console", monospace;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -139,6 +139,10 @@ th,
   box-shadow: 0 0 18px var(--acid);
 }
 
+.actor-status {
+  text-transform: none;
+}
+
 .hero {
   display: grid;
   grid-template-columns: 1fr 300px;
@@ -152,6 +156,14 @@ th,
   color: #acb8b9;
   font-size: 17px;
   line-height: 1.65;
+}
+
+.purpose {
+  max-width: 790px;
+  margin-bottom: 0;
+  color: var(--cyan);
+  font-size: 12px;
+  line-height: 1.55;
 }
 
 code {
@@ -342,11 +354,6 @@ input[type="checkbox"] {
   stroke-dasharray: 7 7;
 }
 
-.edge.nullified {
-  stroke: var(--red);
-  stroke-dasharray: 2 8;
-}
-
 .node {
   cursor: pointer;
   outline: none;
@@ -384,7 +391,7 @@ input[type="checkbox"] {
 
 .node .node-meta {
   fill: var(--muted);
-  font: 9px ui-monospace, SFMono-Regular, Consolas, monospace;
+  font: 9px Consolas, "Lucida Console", monospace;
   font-weight: 400;
   letter-spacing: 0.08em;
 }
@@ -514,7 +521,7 @@ input[type="checkbox"] {
 
 .timeline-item time {
   color: var(--cyan);
-  font: 10px ui-monospace, SFMono-Regular, Consolas, monospace;
+  font: 10px Consolas, "Lucida Console", monospace;
 }
 
 .timeline-item h4 {
@@ -533,6 +540,11 @@ input[type="checkbox"] {
   grid-template-columns: 1.25fr 0.75fr;
   gap: 24px;
   margin-top: 24px;
+}
+
+.anchors,
+.pipeline {
+  min-width: 0;
 }
 
 #anchor-search {
@@ -595,7 +607,7 @@ td:first-child {
   position: relative;
   padding: 40px 10px 8px 0;
   color: var(--muted);
-  font: 9px ui-monospace, SFMono-Regular, Consolas, monospace;
+  font: 9px Consolas, "Lucida Console", monospace;
   counter-increment: pipeline;
 }
 
@@ -677,6 +689,17 @@ footer {
 
 footer p {
   margin: 0;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 @media (max-width: 1180px) {

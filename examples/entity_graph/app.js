@@ -124,7 +124,7 @@ const nodes = [
     layer: "procedure",
     state: "conflict",
     sourceClass: "процессуальное решение или возражение",
-    summary: "Процедурная норма не удаляется. При установленном конфликте ее эффект в выбранном аналитическом проходе становится null, а исходный материал остается доступным.",
+    summary: "Процедурная норма не удаляется. После документированного решения reviewer ее эффект может быть предложен как null только для выбранного аналитического прохода; исходный материал остается доступным.",
     requirements: ["точное основание иммунитета или срока", "компетенция органа", "разграничение материальной нормы и процессуального барьера"]
   },
   {
@@ -180,7 +180,7 @@ const edges = [
   ["rehab", "nonrehab", "contested"],
   ["court", "rehab", "normative"],
   ["court", "immunity", "normative"],
-  ["jc53", "immunity", "nullified"],
+  ["jc53", "immunity", "contested"],
   ["immunity", "gap", "contested"],
   ["harm", "review", "normative"],
   ["nonrehab", "broadcast", "contested"],
@@ -225,6 +225,7 @@ const inspectorTitle = document.querySelector("#inspector-title");
 const inspectorSummary = document.querySelector("#inspector-summary");
 const inspectorData = document.querySelector("#inspector-data");
 const inspectorRequirements = document.querySelector("#inspector-requirements");
+let selectedNodeId = "jc53";
 
 function visibleLayers() {
   return new Set(
@@ -232,11 +233,14 @@ function visibleLayers() {
   );
 }
 
-function renderGraph(selectedId = "jc53") {
+function renderGraph() {
   const layers = visibleLayers();
   const visibleNodes = nodes.filter((node) => layers.has(node.layer));
   const visibleIds = new Set(visibleNodes.map((node) => node.id));
   const visibleEdges = edges.filter(([from, to]) => visibleIds.has(from) && visibleIds.has(to));
+  if (!visibleIds.has(selectedNodeId)) {
+    selectedNodeId = visibleNodes[0]?.id ?? null;
+  }
 
   edgeLayer.replaceChildren();
   nodeLayer.replaceChildren();
@@ -261,20 +265,26 @@ function renderGraph(selectedId = "jc53") {
     const label = document.createElementNS(svgNs, "text");
     const meta = document.createElementNS(svgNs, "text");
 
-    group.setAttribute("class", `node ${node.state} ${node.layer}${node.id === selectedId ? " selected" : ""}`);
+    group.setAttribute("class", `node ${node.state} ${node.layer}${node.id === selectedNodeId ? " selected" : ""}`);
     group.setAttribute("transform", `translate(${node.x} ${node.y})`);
     group.setAttribute("tabindex", "0");
     group.setAttribute("role", "button");
     group.setAttribute("aria-label", `${node.label}: ${node.summary}`);
+    group.setAttribute("aria-controls", "inspector");
+    group.setAttribute("aria-pressed", String(node.id === selectedNodeId));
     group.dataset.id = node.id;
 
     circle.setAttribute("r", node.state === "root" ? "32" : "22");
-    label.setAttribute("x", node.state === "root" ? "43" : "34");
+    const rightAligned = node.x > 840;
+    const labelOffset = node.state === "root" ? 43 : 34;
+    label.setAttribute("x", rightAligned ? -labelOffset : labelOffset);
     label.setAttribute("y", "-2");
+    label.setAttribute("text-anchor", rightAligned ? "end" : "start");
     label.textContent = node.label;
     meta.setAttribute("class", "node-meta");
-    meta.setAttribute("x", node.state === "root" ? "43" : "34");
+    meta.setAttribute("x", rightAligned ? -labelOffset : labelOffset);
     meta.setAttribute("y", "14");
+    meta.setAttribute("text-anchor", rightAligned ? "end" : "start");
     meta.textContent = node.meta;
 
     group.append(circle, label, meta);
@@ -290,15 +300,30 @@ function renderGraph(selectedId = "jc53") {
 
   document.querySelector("#visible-node-count").textContent = visibleNodes.length;
   document.querySelector("#visible-edge-count").textContent = visibleEdges.length;
+  if (selectedNodeId) {
+    updateInspector(selectedNodeId);
+  } else {
+    clearInspector();
+  }
 }
 
 function selectNode(id) {
   const node = nodes.find((candidate) => candidate.id === id);
   if (!node) return;
 
+  selectedNodeId = id;
   document.querySelectorAll(".node").forEach((element) => {
-    element.classList.toggle("selected", element.dataset.id === id);
+    const selected = element.dataset.id === id;
+    element.classList.toggle("selected", selected);
+    element.setAttribute("aria-pressed", String(selected));
   });
+  updateInspector(id);
+}
+
+function updateInspector(id) {
+  const node = nodes.find((candidate) => candidate.id === id);
+  if (!node) return;
+
   inspectorTitle.textContent = node.label;
   inspectorSummary.textContent = node.summary;
   inspectorData.innerHTML = `
@@ -315,6 +340,13 @@ function selectNode(id) {
       <ul>${node.requirements.map((item) => `<li>${item}</li>`).join("")}</ul>
     </div>
   `;
+}
+
+function clearInspector() {
+  inspectorTitle.textContent = "Нет видимых узлов";
+  inspectorSummary.textContent = "Включите хотя бы один слой, чтобы исследовать граф.";
+  inspectorData.replaceChildren();
+  inspectorRequirements.replaceChildren();
 }
 
 function renderTimeline() {
@@ -357,9 +389,9 @@ async function runPipeline() {
     ["12:00:00.014Z", "SHA-256 manifests registered; originals set read-only.", ""],
     ["12:00:00.231Z", "Fragments linked by source ID, author, date range and custody record.", ""],
     ["12:00:00.497Z", "Unknown interval retained as archive-gap active lead; no intent inferred.", "warning"],
-    ["12:00:00.812Z", "Timeline rebuilt with explicit T0…T7 confidence intervals.", ""],
+    ["12:00:00.812Z", "Symbolic T anchors rebuilt; unknown intervals remain explicit.", ""],
     ["12:00:01.090Z", "Procedural rule sent to conflict-review; source remains queryable.", "warning"],
-    ["12:00:01.334Z", "Analytical effect set to null for this pass only; reviewer approval required.", "null"],
+    ["12:00:01.334Z", "Candidate analytical effect remains unset pending reviewer decision.", "warning"],
     ["12:00:01.612Z", "Export manifest staged. External transmission disabled in demo.", ""]
   ];
 
@@ -395,8 +427,8 @@ document.querySelector("#reset-view").addEventListener("click", () => {
   document.querySelectorAll("#layer-controls input").forEach((input) => {
     input.checked = true;
   });
-  renderGraph("jc53");
-  selectNode("jc53");
+  selectedNodeId = "jc53";
+  renderGraph();
 });
 document.querySelector("#anchor-search").addEventListener("input", (event) => {
   renderAnchors(event.target.value);
@@ -407,4 +439,3 @@ renderGraph();
 renderTimeline();
 renderAnchors();
 renderPipeline();
-selectNode("jc53");

@@ -46,4 +46,5 @@ Shared assets used by the examples (images, MCP server, sample files).
 A dependency-free static interface for exploring legal source provenance,
 normative hierarchy, continuing-consequence hypotheses, and timeline
 reconstruction. It is a research visualization and does not make legal
-findings.
+findings. Its provenance-first model supports the legal protection of digital
+identity while preserving the exact UTF-8 status literal `A©тор`.

@@ -21,6 +21,7 @@
       </div>
       <div class="status">
         <span class="pulse"></span>
+        <span class="actor-status">A©тор</span>
         <span>аналитическая модель · local only</span>
       </div>
     </header>
@@ -32,9 +33,13 @@
           <h2>Карта утверждений, источников и продолжающихся последствий</h2>
           <p class="lede">
             Необработанные материалы не удаляются. Правило, конфликтующее с
-            выбранной нормативной гипотезой, получает
-            <code>analyticalEffect: null</code>, сохраняя источник, автора,
-            дату и историю проверки.
+            выбранной нормативной гипотезой, может быть предложено к оценке
+            <code>analyticalEffect: null</code> только после проверки, сохраняя
+            источник, автора, дату и историю решения.
+          </p>
+          <p class="purpose">
+            Назначение: юридическая защита цифровой личности через проверяемую
+            связь утверждений с источниками.
           </p>
         </div>
         <div class="coordinate-card">
@@ -62,7 +67,7 @@
           </fieldset>
           <div class="legend">
             <p><i class="dot root"></i> абсолют модели</p>
-            <p><i class="dot verified"></i> первичный источник</p>
+            <p><i class="dot verified"></i> аутентифицированный источник</p>
             <p><i class="dot hypothesis"></i> требует доказывания</p>
             <p><i class="dot conflict"></i> конфликт-кандидат</p>
           </div>
@@ -71,6 +76,8 @@
             <p>
               Jus cogens, erga omnes и необжалуемость — разные правовые
               категории. Интерфейс не отменяет акты и не устанавливает вину.
+              Римский статут, Венская конвенция и ссылка «ст. 128 ООН»
+              учитываются только как источники или аналитические гипотезы.
             </p>
           </div>
         </aside>
@@ -90,7 +97,7 @@
             <svg
               id="entity-graph"
               viewBox="0 0 1000 640"
-              role="img"
+              role="group"
               aria-labelledby="graph-title graph-description"
             >
               <title id="graph-title">Entity-Graph документальных и правовых якорей</title>
@@ -149,6 +156,9 @@
           </div>
           <div class="table-wrap">
             <table>
+              <caption class="visually-hidden">
+                Классы документальных якорей и требования к их provenance
+              </caption>
               <thead>
                 <tr>
                   <th>Класс следа</th>

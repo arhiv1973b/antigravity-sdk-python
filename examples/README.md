@@ -40,3 +40,10 @@ mini-applications:
 ### [`resources/`](resources/)
 
 Shared assets used by the examples (images, MCP server, sample files).
+
+### [`entity_graph/`](entity_graph/)
+
+A dependency-free static interface for exploring legal source provenance,
+normative hierarchy, continuing-consequence hypotheses, and timeline
+reconstruction. It is a research visualization and does not make legal
+findings.

@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="Исследовательский Entity-Graph для проверки гипотез о jus cogens, длящихся последствиях и документальных следах."
+    >
+    <title>Jus Cogens Entity Graph</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="masthead">
+      <div class="brand">
+        <span class="brand-mark">§53</span>
+        <div>
+          <p class="eyebrow">WEB_ARCH_CASE_MACHERET_2026</p>
+          <h1>Координатный протокол <span>Entity‑Graph</span></h1>
+        </div>
+      </div>
+      <div class="status">
+        <span class="pulse"></span>
+        <span class="actor-status">A©тор</span>
+        <span>аналитическая модель · local only</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <p class="eyebrow">Z = 0 · нормативный корень</p>
+          <h2>Карта утверждений, источников и продолжающихся последствий</h2>
+          <p class="lede">
+            Необработанные материалы не удаляются. Правило, конфликтующее с
+            выбранной нормативной гипотезой, может быть предложено к оценке
+            <code>analyticalEffect: null</code> только после проверки, сохраняя
+            источник, автора, дату и историю решения.
+          </p>
+          <p class="purpose">
+            Назначение: юридическая защита цифровой личности через проверяемую
+            связь утверждений с источниками.
+          </p>
+        </div>
+        <div class="coordinate-card">
+          <span>ROOT / IMMUTABLE</span>
+          <strong>Jus_Cogens_Override</strong>
+          <div><b>Z</b> 0.000</div>
+          <div><b>T</b> ∞ continuing</div>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <aside class="controls panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">01 / VIEW</p>
+              <h3>Слои графа</h3>
+            </div>
+            <button id="reset-view" class="icon-button" type="button" aria-label="Сбросить вид">↺</button>
+          </div>
+          <fieldset id="layer-controls">
+            <label><input type="checkbox" value="norm" checked> Нормативные</label>
+            <label><input type="checkbox" value="event" checked> События</label>
+            <label><input type="checkbox" value="evidence" checked> Доказательства</label>
+            <label><input type="checkbox" value="procedure" checked> Процедурные</label>
+          </fieldset>
+          <div class="legend">
+            <p><i class="dot root"></i> абсолют модели</p>
+            <p><i class="dot verified"></i> аутентифицированный источник</p>
+            <p><i class="dot hypothesis"></i> требует доказывания</p>
+            <p><i class="dot conflict"></i> конфликт-кандидат</p>
+          </div>
+          <div class="model-note">
+            <strong>Ограничение модели</strong>
+            <p>
+              Jus cogens, erga omnes и необжалуемость — разные правовые
+              категории. Интерфейс не отменяет акты и не устанавливает вину.
+              Римский статут, Венская конвенция и ссылка «ст. 128 ООН»
+              учитываются только как источники или аналитические гипотезы.
+            </p>
+          </div>
+        </aside>
+
+        <section class="graph-panel panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">02 / ENTITY MAP</p>
+              <h3>Граф причин, следов и правовых позиций</h3>
+            </div>
+            <div class="graph-stats">
+              <span><b id="visible-node-count">0</b> узлов</span>
+              <span><b id="visible-edge-count">0</b> связей</span>
+            </div>
+          </div>
+          <div class="graph-shell">
+            <svg
+              id="entity-graph"
+              viewBox="0 0 1000 640"
+              role="group"
+              aria-labelledby="graph-title graph-description"
+            >
+              <title id="graph-title">Entity-Graph документальных и правовых якорей</title>
+              <desc id="graph-description">
+                Интерактивный ориентированный граф с корнем статьи 53 Венской
+                конвенции, временной осью и узлами доказательств.
+              </desc>
+              <defs>
+                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(134,151,159,.12)" stroke-width="1"></path>
+                </pattern>
+                <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z"></path>
+                </marker>
+              </defs>
+              <rect width="1000" height="640" fill="url(#grid)"></rect>
+              <g id="edges"></g>
+              <g id="nodes"></g>
+            </svg>
+            <div class="axis-label axis-z">Z / приоритет →</div>
+            <div class="axis-label axis-t">T / время →</div>
+          </div>
+        </section>
+
+        <aside id="inspector" class="inspector panel" aria-live="polite">
+          <p class="eyebrow">03 / INSPECTOR</p>
+          <h3 id="inspector-title">Выберите узел</h3>
+          <p id="inspector-summary" class="muted">
+            Нажмите на сущность графа, чтобы увидеть координаты, класс источника
+            и критерий верификации.
+          </p>
+          <dl id="inspector-data"></dl>
+          <div id="inspector-requirements"></div>
+        </aside>
+      </section>
+
+      <section class="timeline-section panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">04 / VECTOR T</p>
+            <h3>Модель длящихся последствий</h3>
+          </div>
+          <span class="chip">continuing-consequences ≠ automatic liability</span>
+        </div>
+        <div id="timeline" class="timeline"></div>
+      </section>
+
+      <section class="lower-grid">
+        <section class="anchors panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">05 / ANCHORS</p>
+              <h3>Первичные точки привязки</h3>
+            </div>
+            <input id="anchor-search" type="search" placeholder="Фильтр по классу или полю…" aria-label="Фильтр якорей">
+          </div>
+          <div class="table-wrap">
+            <table>
+              <caption class="visually-hidden">
+                Классы документальных якорей и требования к их provenance
+              </caption>
+              <thead>
+                <tr>
+                  <th>Класс следа</th>
+                  <th>Минимальные поля</th>
+                  <th>Временной якорь</th>
+                  <th>Роль в графе</th>
+                </tr>
+              </thead>
+              <tbody id="anchor-rows"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="pipeline panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">06 / PIPELINE</p>
+              <h3>Маршрутизация фрагментов</h3>
+            </div>
+            <button id="run-pipeline" class="primary-button" type="button">Запустить симуляцию</button>
+          </div>
+          <ol id="pipeline-steps" class="pipeline-steps"></ol>
+          <div id="pipeline-log" class="terminal-log" aria-live="polite">
+            <span class="muted">Ожидание локального запуска…</span>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        Исследовательский интерфейс. Каждое утверждение требует независимой
+        аутентификации, контекста и правовой оценки компетентным органом.
+      </p>
+      <p>ARTICLE 53 / ILC 2022 / PROVENANCE FIRST</p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
